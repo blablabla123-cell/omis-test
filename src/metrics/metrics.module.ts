@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { PerfomanceService } from './perfomance.service.js';
-import { PerfomanceController } from './perfomance.controller.js';
+import { MetricsController } from './metrics.controller.js';
+import { MetricsService } from './metrics.service.js';
+import { PerfomanceService } from '../perfomance/perfomance.service.js';
 import { APP_GUARD } from '@nestjs/core';
 import { JWTAuthenticationGuard } from '../authentication/guards/index.js';
 import { RolesGuard } from '../common/index.js';
 
 @Module({
-  controllers: [PerfomanceController],
+  controllers: [MetricsController],
   providers: [
+    MetricsService,
     PerfomanceService,
     {
       provide: APP_GUARD,
@@ -19,4 +21,4 @@ import { RolesGuard } from '../common/index.js';
     },
   ],
 })
-export class PerfomanceModule {}
+export class MetricsModule {}

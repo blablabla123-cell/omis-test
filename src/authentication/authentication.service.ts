@@ -78,6 +78,7 @@ export class AuthenticationService {
 
     return {
       userId: user.id,
+      role: user.role,
     };
   }
 }

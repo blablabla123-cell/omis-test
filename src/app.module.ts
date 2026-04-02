@@ -7,6 +7,7 @@ import { PerfomanceModule } from './perfomance/perfomance.module.js';
 import { UsersModule } from './users/users.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseService } from './database/database.service.js';
+import { MetricsModule } from './metrics/metrics.module.js';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { DatabaseService } from './database/database.service.js';
     PerfomanceModule,
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    MetricsModule,
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseService],
