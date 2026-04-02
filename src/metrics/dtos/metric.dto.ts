@@ -1,5 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsDecimal,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -18,19 +18,36 @@ export class MetricDto {
     this.weight = weight;
   }
 
+  @ApiProperty({
+    example: 1,
+    required: false,
+  })
   @IsOptional()
   @IsInt()
   @IsPositive()
   id?: number;
 
+  @ApiProperty({
+    example: 'Order',
+    required: true,
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({
+    example: 100,
+    required: true,
+  })
+  @IsNumber()
   @IsPositive()
   @IsInt()
   targetValue: number;
 
+  @ApiProperty({
+    example: 0.5,
+    required: true,
+  })
   @IsNumber()
   @IsPositive()
   @Min(0)

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { APIResponse, APIResponseStatus } from '../common/index.js';
 import { DatabaseService } from '../database/database.service.js';
 import { Metric } from '../generated/prisma/client.js';
@@ -40,6 +40,10 @@ export class MetricsService {
         id,
       },
     });
+
+    if (!metric) {
+      throw new NotFoundException('Metric not found');
+    }
 
     return {
       status: APIResponseStatus.SUCCESS,

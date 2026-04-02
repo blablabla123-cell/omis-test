@@ -1,5 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsDate,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -24,24 +24,44 @@ export class PerfomanceReviewDto {
     this.period = period;
   }
 
+  @ApiProperty({
+    example: 1,
+    required: false,
+  })
   @IsOptional()
   @IsInt()
   @IsPositive()
   id?: number;
 
+  @ApiProperty({
+    example: '1a0a0a0a-1a0a-1a0a-1a0a-1a0a0a0a0a0a',
+    required: true,
+  })
   @IsString()
   @IsNotEmpty()
   @IsUUID()
   userId: string;
 
+  @ApiProperty({
+    example: 1,
+    required: true,
+  })
   @IsInt()
   @IsPositive()
   metricId: number;
 
+  @ApiProperty({
+    example: 10,
+    required: true,
+  })
   @IsPositive()
   @IsInt()
   factValue: number;
 
+  @ApiProperty({
+    example: '2023-01-01',
+    required: true,
+  })
   @IsString()
   @IsNotEmpty()
   period: string;

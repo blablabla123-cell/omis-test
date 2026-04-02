@@ -22,12 +22,16 @@ import { JWTPayload } from '../authentication/types/index.js';
 import { JWTAuthenticationGuard } from '../authentication/guards/jwt-authentication.guard.js';
 import { Review } from './types/review.type.js';
 import { LoggerService } from '../logger/logger.service.js';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('perfomance')
 @UseGuards(JWTAuthenticationGuard, RolesGuard)
+@ApiResponse({ status: 401, description: 'Unauthorized' })
+@ApiResponse({ status: 403, description: 'Forbidden' })
 export class PerfomanceController {
-  constructor(private readonly perfomanceService: PerfomanceService) { }
+  constructor(private readonly perfomanceService: PerfomanceService) {}
 
+  @ApiResponse({ status: 200, description: 'Review fetched successfully' })
   @HttpCode(HttpStatus.OK)
   @Roles(UserRole.ADMIN, UserRole.USER)
   @Get('my-perfomance')
@@ -37,6 +41,7 @@ export class PerfomanceController {
     return this.perfomanceService.getMyPerfomance(payload.id);
   }
 
+  @ApiResponse({ status: 200, description: 'Reviews fetched successfully' })
   @HttpCode(HttpStatus.OK)
   @Roles(UserRole.ADMIN)
   @Get(':id')
@@ -46,6 +51,7 @@ export class PerfomanceController {
     return this.perfomanceService.getReviews(userId);
   }
 
+  @ApiResponse({ status: 201, description: 'Review created successfully' })
   @HttpCode(HttpStatus.CREATED)
   @Roles(UserRole.ADMIN)
   @Post()
@@ -55,6 +61,7 @@ export class PerfomanceController {
     return this.perfomanceService.createReview(dto);
   }
 
+  @ApiResponse({ status: 200, description: 'Review updated successfully' })
   @HttpCode(HttpStatus.OK)
   @Roles(UserRole.ADMIN)
   @Put()
@@ -64,6 +71,8 @@ export class PerfomanceController {
     return this.perfomanceService.updateReview(dto);
   }
 
+  @ApiResponse({ status: 200, description: 'Review deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Review not found' })
   @HttpCode(HttpStatus.OK)
   @Roles(UserRole.ADMIN)
   @Delete(':id')

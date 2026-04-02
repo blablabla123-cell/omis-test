@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
 import { PerfomanceReview } from '../generated/prisma/client.js';
 import { APIResponse, APIResponseStatus } from '../common/index.js';
@@ -72,6 +72,10 @@ export class PerfomanceService {
         id: reviewId,
       },
     });
+
+    if (!deletedReview) {
+      throw new NotFoundException('Review not found');
+    }
 
     return {
       status: APIResponseStatus.SUCCESS,
