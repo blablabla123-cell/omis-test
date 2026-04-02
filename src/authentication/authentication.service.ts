@@ -20,7 +20,7 @@ export class AuthenticationService {
     private readonly authenticationUtils: AuthenticationUtils,
     private readonly jwtService: JwtService,
     private readonly loggerService: LoggerService,
-  ) {}
+  ) { }
 
   async signIn(
     payload: JWTPayload,
@@ -79,7 +79,6 @@ export class AuthenticationService {
 
     return {
       userId: user.id,
-      role: user.role,
     };
   }
 }

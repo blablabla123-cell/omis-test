@@ -3,10 +3,13 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { env } from 'prisma/config';
 import { JWTPayload } from '../types/jwt-payload.type.js';
+import { UsersService } from '../../users/users.service.js';
+import { User } from '../../generated/prisma/client.js';
+import { UserNotFoundException } from '../../exceptions/index.js';
 
 @Injectable()
 export class JWTStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly usersService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -14,7 +17,8 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any): Promise<JWTPayload> {
-    return { userId: payload.sub, role: payload.role };
+  async validate(payload: any): Promise<User | null> {
+    const user = await this.usersService.getUserById(payload.userId);
+    return user;
   }
 }

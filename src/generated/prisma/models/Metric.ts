@@ -29,27 +29,27 @@ export type AggregateMetric = {
 export type MetricAvgAggregateOutputType = {
   id: number | null
   targetValue: number | null
-  weight: runtime.Decimal | null
+  weight: number | null
 }
 
 export type MetricSumAggregateOutputType = {
   id: number | null
   targetValue: number | null
-  weight: runtime.Decimal | null
+  weight: number | null
 }
 
 export type MetricMinAggregateOutputType = {
   id: number | null
   name: string | null
   targetValue: number | null
-  weight: runtime.Decimal | null
+  weight: number | null
 }
 
 export type MetricMaxAggregateOutputType = {
   id: number | null
   name: string | null
   targetValue: number | null
-  weight: runtime.Decimal | null
+  weight: number | null
 }
 
 export type MetricCountAggregateOutputType = {
@@ -185,7 +185,7 @@ export type MetricGroupByOutputType = {
   id: number
   name: string
   targetValue: number
-  weight: runtime.Decimal
+  weight: number
   _count: MetricCountAggregateOutputType | null
   _avg: MetricAvgAggregateOutputType | null
   _sum: MetricSumAggregateOutputType | null
@@ -215,7 +215,7 @@ export type MetricWhereInput = {
   id?: Prisma.IntFilter<"Metric"> | number
   name?: Prisma.StringFilter<"Metric"> | string
   targetValue?: Prisma.IntFilter<"Metric"> | number
-  weight?: Prisma.DecimalFilter<"Metric"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFilter<"Metric"> | number
   perfomanceReviews?: Prisma.PerfomanceReviewListRelationFilter
 }
 
@@ -234,7 +234,7 @@ export type MetricWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.MetricWhereInput | Prisma.MetricWhereInput[]
   name?: Prisma.StringFilter<"Metric"> | string
   targetValue?: Prisma.IntFilter<"Metric"> | number
-  weight?: Prisma.DecimalFilter<"Metric"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFilter<"Metric"> | number
   perfomanceReviews?: Prisma.PerfomanceReviewListRelationFilter
 }, "id">
 
@@ -257,13 +257,13 @@ export type MetricScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Metric"> | number
   name?: Prisma.StringWithAggregatesFilter<"Metric"> | string
   targetValue?: Prisma.IntWithAggregatesFilter<"Metric"> | number
-  weight?: Prisma.DecimalWithAggregatesFilter<"Metric"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatWithAggregatesFilter<"Metric"> | number
 }
 
 export type MetricCreateInput = {
   name: string
   targetValue: number
-  weight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight: number
   perfomanceReviews?: Prisma.PerfomanceReviewCreateNestedManyWithoutMetricInput
 }
 
@@ -271,14 +271,14 @@ export type MetricUncheckedCreateInput = {
   id?: number
   name: string
   targetValue: number
-  weight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight: number
   perfomanceReviews?: Prisma.PerfomanceReviewUncheckedCreateNestedManyWithoutMetricInput
 }
 
 export type MetricUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   targetValue?: Prisma.IntFieldUpdateOperationsInput | number
-  weight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
   perfomanceReviews?: Prisma.PerfomanceReviewUpdateManyWithoutMetricNestedInput
 }
 
@@ -286,7 +286,7 @@ export type MetricUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   targetValue?: Prisma.IntFieldUpdateOperationsInput | number
-  weight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
   perfomanceReviews?: Prisma.PerfomanceReviewUncheckedUpdateManyWithoutMetricNestedInput
 }
 
@@ -294,20 +294,20 @@ export type MetricCreateManyInput = {
   id?: number
   name: string
   targetValue: number
-  weight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight: number
 }
 
 export type MetricUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   targetValue?: Prisma.IntFieldUpdateOperationsInput | number
-  weight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type MetricUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   targetValue?: Prisma.IntFieldUpdateOperationsInput | number
-  weight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type MetricCountOrderByAggregateInput = {
@@ -356,12 +356,12 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type MetricCreateNestedOneWithoutPerfomanceReviewsInput = {
@@ -381,14 +381,14 @@ export type MetricUpdateOneRequiredWithoutPerfomanceReviewsNestedInput = {
 export type MetricCreateWithoutPerfomanceReviewsInput = {
   name: string
   targetValue: number
-  weight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight: number
 }
 
 export type MetricUncheckedCreateWithoutPerfomanceReviewsInput = {
   id?: number
   name: string
   targetValue: number
-  weight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight: number
 }
 
 export type MetricCreateOrConnectWithoutPerfomanceReviewsInput = {
@@ -410,14 +410,14 @@ export type MetricUpdateToOneWithWhereWithoutPerfomanceReviewsInput = {
 export type MetricUpdateWithoutPerfomanceReviewsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   targetValue?: Prisma.IntFieldUpdateOperationsInput | number
-  weight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type MetricUncheckedUpdateWithoutPerfomanceReviewsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   targetValue?: Prisma.IntFieldUpdateOperationsInput | number
-  weight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  weight?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 
@@ -498,7 +498,7 @@ export type $MetricPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: number
     name: string
     targetValue: number
-    weight: runtime.Decimal
+    weight: number
   }, ExtArgs["result"]["metric"]>
   composites: {}
 }
@@ -926,7 +926,7 @@ export interface MetricFieldRefs {
   readonly id: Prisma.FieldRef<"Metric", 'Int'>
   readonly name: Prisma.FieldRef<"Metric", 'String'>
   readonly targetValue: Prisma.FieldRef<"Metric", 'Int'>
-  readonly weight: Prisma.FieldRef<"Metric", 'Decimal'>
+  readonly weight: Prisma.FieldRef<"Metric", 'Float'>
 }
     
 

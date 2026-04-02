@@ -27,14 +27,11 @@ export class MetricDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNumber()
   @IsPositive()
   @IsInt()
   targetValue: number;
 
-  @IsDecimal({
-    decimal_digits: '3,2',
-  })
+  @IsNumber()
   @IsPositive()
   @Min(0)
   @Max(1)

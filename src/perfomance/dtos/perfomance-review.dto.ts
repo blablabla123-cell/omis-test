@@ -14,7 +14,7 @@ export class PerfomanceReviewDto {
     userId: string,
     metricId: number,
     factValue: number,
-    period: Date,
+    period: string,
     id?: number,
   ) {
     this.id = id;
@@ -38,11 +38,11 @@ export class PerfomanceReviewDto {
   @IsPositive()
   metricId: number;
 
-  @IsNumber()
   @IsPositive()
   @IsInt()
   factValue: number;
 
-  @IsDate()
-  period: Date;
+  @IsString()
+  @IsNotEmpty()
+  period: string;
 }

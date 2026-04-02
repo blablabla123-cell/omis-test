@@ -15,7 +15,7 @@ import { LocalAuthenticationGuard } from './guards/local-authentication.guard.js
 
 @Controller('authentication')
 export class AuthenticationController {
-  constructor(private readonly authenticationService: AuthenticationService) {}
+  constructor(private readonly authenticationService: AuthenticationService) { }
 
   @UseGuards(LocalAuthenticationGuard)
   @HttpCode(HttpStatus.OK)

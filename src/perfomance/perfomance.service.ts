@@ -3,17 +3,25 @@ import { DatabaseService } from '../database/database.service.js';
 import { PerfomanceReview } from '../generated/prisma/client.js';
 import { APIResponse, APIResponseStatus } from '../common/index.js';
 import { PerfomanceReviewDto } from './dtos/perfomance-review.dto.js';
+import { Review } from './types/review.type.js';
+import { PerfomanceUtils } from './perfomance.utils.js';
 
 @Injectable()
 export class PerfomanceService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly perfomanceUtils: PerfomanceUtils,
+  ) {}
 
   async createReview(
     dto: PerfomanceReviewDto,
   ): Promise<APIResponse<PerfomanceReview>> {
     const perfomanceReview = await this.databaseService.perfomanceReview.create(
       {
-        data: dto,
+        data: {
+          ...dto,
+          period: new Date(dto.period),
+        },
       },
     );
 
@@ -45,7 +53,10 @@ export class PerfomanceService {
       where: {
         id: dto.id,
       },
-      data: dto,
+      data: {
+        ...dto,
+        period: new Date(dto.period),
+      },
     });
 
     return {
@@ -69,24 +80,26 @@ export class PerfomanceService {
     };
   }
 
-  async getMyPerfomance(userId: string): Promise<
-    APIResponse<{
-      reviews: PerfomanceReview[];
-      total: number;
-    }>
-  > {
+  async getMyPerfomance(userId: string): Promise<APIResponse<Review>> {
+    console.log(userId);
+
     const reviews = await this.databaseService.perfomanceReview.findMany({
       where: {
         userId: userId,
       },
+      include: {
+        metric: true,
+      },
     });
+
+    const totalKPI = this.perfomanceUtils.calculateTotalKPI(reviews);
 
     return {
       status: APIResponseStatus.SUCCESS,
-      message: 'Reviews fetched successfully',
+      message: 'Perfomance fetched successfully',
       data: {
         reviews,
-        total: reviews.length,
+        totalKPI,
       },
     };
   }

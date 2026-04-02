@@ -8,16 +8,19 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { APIResponse, Roles } from '../common/index.js';
+import { APIResponse, Roles, RolesGuard } from '../common/index.js';
 import { MetricsService } from './metrics.service.js';
 import { Metric, UserRole } from '../generated/prisma/client.js';
 import { MetricDto } from './dtos/index.js';
+import { JWTAuthenticationGuard } from '../authentication/guards/index.js';
 
 @Controller('metrics')
+@UseGuards(JWTAuthenticationGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
 export class MetricsController {
-  constructor(private readonly metricsService: MetricsService) {}
+  constructor(private readonly metricsService: MetricsService) { }
 
   @HttpCode(HttpStatus.OK)
   @Get()
@@ -32,7 +35,7 @@ export class MetricsController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Delete()
+  @Delete(':id')
   async deleteMetric(@Param('id') id: string): Promise<APIResponse<Metric>> {
     return this.metricsService.deleteMetric(Number(id));
   }

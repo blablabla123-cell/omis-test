@@ -8,15 +8,11 @@ import { RolesGuard } from '../common/index.js';
 import { DatabaseModule } from '../database/database.module.js';
 import { DatabaseService } from '../database/database.service.js';
 import { JWTStrategy } from '../authentication/strategies/index.js';
+import { UsersService } from '../users/users.service.js';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [MetricsController],
-  providers: [
-    DatabaseService,
-    MetricsService,
-    JWTStrategy,
-    PerfomanceService,
-  ],
+  providers: [DatabaseService, UsersService, MetricsService, JWTStrategy],
 })
-export class MetricsModule { }
+export class MetricsModule {}

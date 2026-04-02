@@ -28,7 +28,7 @@ model Metric {
     id                Int                @id @default(autoincrement())
     name              String
     targetValue       Int
-    weight            Decimal            @db.Decimal(3, 2)
+    weight            Float
     perfomanceReviews PerfomanceReview[]
 
     @@map("metrics")

@@ -8,9 +8,15 @@ import { APIResponse, APIResponseStatus } from '../common/index.js';
 export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
+  async getUserById(userId: string): Promise<User | null> {
+    return this.databaseService.user.findUnique({
+      where: { id: userId, deletedAt: null },
+    });
+  }
+
   async getUserByEmail(email: string): Promise<User | null> {
     return this.databaseService.user.findUnique({
-      where: { email },
+      where: { email, deletedAt: null },
     });
   }
 
