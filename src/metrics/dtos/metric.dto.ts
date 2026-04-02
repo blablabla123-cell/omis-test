@@ -11,6 +11,13 @@ import {
 } from 'class-validator';
 
 export class MetricDto {
+  constructor(name: string, targetValue: number, weight: number, id?: number) {
+    this.id = id;
+    this.name = name;
+    this.targetValue = targetValue;
+    this.weight = weight;
+  }
+
   @IsOptional()
   @IsInt()
   @IsPositive()

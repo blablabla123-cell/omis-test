@@ -1,5 +1,5 @@
 export type ErrorAPIResponse = {
-  statusCode?: number;
+  statusCode: number;
   timestamp: string;
   path: string;
   error?: any;

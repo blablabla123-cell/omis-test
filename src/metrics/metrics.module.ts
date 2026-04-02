@@ -5,20 +5,18 @@ import { PerfomanceService } from '../perfomance/perfomance.service.js';
 import { APP_GUARD } from '@nestjs/core';
 import { JWTAuthenticationGuard } from '../authentication/guards/index.js';
 import { RolesGuard } from '../common/index.js';
+import { DatabaseModule } from '../database/database.module.js';
+import { DatabaseService } from '../database/database.service.js';
+import { JWTStrategy } from '../authentication/strategies/index.js';
 
 @Module({
+  imports: [DatabaseModule],
   controllers: [MetricsController],
   providers: [
+    DatabaseService,
     MetricsService,
+    JWTStrategy,
     PerfomanceService,
-    {
-      provide: APP_GUARD,
-      useClass: JWTAuthenticationGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
   ],
 })
-export class MetricsModule {}
+export class MetricsModule { }

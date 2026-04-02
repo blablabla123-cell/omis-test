@@ -9,10 +9,11 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { APIResponse, Roles } from '../common/index.js';
+import { APIResponse, GetUser, Roles } from '../common/index.js';
 import { PerfomanceReview, UserRole } from '../generated/prisma/client.js';
 import { PerfomanceReviewDto } from './dtos/perfomance-review.dto.js';
 import { PerfomanceService } from './perfomance.service.js';
+import { JWTPayload } from '../authentication/types/index.js';
 
 @Controller('perfomance')
 export class PerfomanceController {
@@ -50,5 +51,7 @@ export class PerfomanceController {
 
   @HttpCode(HttpStatus.OK)
   @Get('my-perfomance')
-  async getMyPerfomance() {}
+  async getMyPerfomance(@GetUser() payload: JWTPayload) {
+    return this.perfomanceService.getMyPerfomance(payload.userId);
+  }
 }

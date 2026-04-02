@@ -7,6 +7,11 @@ import {
 } from 'class-validator';
 
 export class AuthenticationDto {
+  constructor(email: string, password: string) {
+    this.email = email;
+    this.password = password;
+  }
+
   @IsNotEmpty()
   @IsString()
   @IsEmail()

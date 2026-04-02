@@ -5,6 +5,8 @@ import { UsersModule } from '../users/users.module.js';
 import { JwtModule } from '@nestjs/jwt';
 import { env } from 'prisma/config';
 import { AuthenticationUtils } from './authentication.utils.js';
+import { LoggerService } from '../logger/logger.service.js';
+import { LocalStrategy } from './strategies/local.strategy.js';
 
 @Module({
   imports: [
@@ -18,6 +20,6 @@ import { AuthenticationUtils } from './authentication.utils.js';
     }),
   ],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService, AuthenticationUtils],
+  providers: [AuthenticationService, AuthenticationUtils, LoggerService, LocalStrategy,],
 })
-export class AuthenticationModule {}
+export class AuthenticationModule { }
