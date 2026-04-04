@@ -32,10 +32,10 @@ export class PerfomanceService {
     };
   }
 
-  async getReviews(userId: string): Promise<APIResponse<PerfomanceReview[]>> {
+  async getReviews(id: string): Promise<APIResponse<PerfomanceReview[]>> {
     const getReviews = await this.databaseService.perfomanceReview.findMany({
       where: {
-        userId,
+        userId: id,
       },
     });
 
@@ -47,11 +47,12 @@ export class PerfomanceService {
   }
 
   async updateReview(
+    id: number,
     dto: PerfomanceReviewDto,
   ): Promise<APIResponse<PerfomanceReview>> {
     const updatedReview = await this.databaseService.perfomanceReview.update({
       where: {
-        id: dto.id,
+        id,
       },
       data: {
         ...dto,
@@ -85,11 +86,9 @@ export class PerfomanceService {
   }
 
   async getMyPerfomance(userId: string): Promise<APIResponse<Review>> {
-    console.log(userId);
-
     const reviews = await this.databaseService.perfomanceReview.findMany({
       where: {
-        userId: userId,
+        userId,
       },
       include: {
         metric: true,

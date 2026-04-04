@@ -11,46 +11,39 @@ import {
 } from 'class-validator';
 
 export class MetricDto {
-  constructor(name: string, targetValue: number, weight: number, id?: number) {
-    this.id = id;
+  constructor(name: string, targetValue: number, weight: number) {
     this.name = name;
     this.targetValue = targetValue;
     this.weight = weight;
   }
 
   @ApiProperty({
-    example: 1,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
-  id?: number;
-
-  @ApiProperty({
     example: 'Order',
     required: true,
+    description: 'Metric name',
   })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  readonly name: string;
 
   @ApiProperty({
     example: 100,
     required: true,
+    description: 'Metric target value',
   })
   @IsNumber()
   @IsPositive()
   @IsInt()
-  targetValue: number;
+  readonly targetValue: number;
 
   @ApiProperty({
     example: 0.5,
     required: true,
+    description: 'Metric weight',
   })
   @IsNumber()
   @IsPositive()
   @Min(0)
   @Max(1)
-  weight: number;
+  readonly weight: number;
 }

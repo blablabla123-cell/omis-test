@@ -11,7 +11,7 @@ import { AuthenticationService } from './authentication.service.js';
 import { AuthenticationDto } from './dtos/authentication.dto.js';
 import { APIResponse } from '../common/index.js';
 import { AuthenticationResponse } from './types/authentication-response.type.js';
-import { LocalAuthenticationGuard } from './guards/local-authentication.guard.js';
+import { LocalAuthenticationGuard } from '../common/guards/local-authentication.guard.js';
 import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('authentication')

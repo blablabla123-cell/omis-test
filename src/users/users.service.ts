@@ -6,7 +6,7 @@ import { APIResponse, APIResponseStatus } from '../common/index.js';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly databaseService: DatabaseService) { }
+  constructor(private readonly databaseService: DatabaseService) {}
 
   async getUserById(userId: string): Promise<User | null> {
     return this.databaseService.user.findUnique({
@@ -24,9 +24,9 @@ export class UsersService {
     return this.databaseService.user.create({ data: dto });
   }
 
-  async deleteUserById(userId: string): Promise<APIResponse<User>> {
+  async deleteUserById(id: string): Promise<APIResponse<User>> {
     const user = await this.databaseService.user.update({
-      where: { id: userId },
+      where: { id },
       data: {
         deletedAt: new Date(),
       },

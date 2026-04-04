@@ -1,17 +1,23 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module.js';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {
-  BadRequestException,
   ConsoleLogger,
-  HttpStatus,
   ValidationPipe,
+  BadRequestException,
+  HttpStatus,
 } from '@nestjs/common';
-import { ExceptionsFilter } from './filters/exceptions.filter.js';
+import { NestFactory, HttpAdapterHost } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module.js';
+import 'dotenv/config';
+import { LoggerService } from './logger/logger.service.js';
+import { AllExceptionsFilter } from './common/index.js';
+import { GlobalInterceptor } from './common/interceptors/global.interceptor.js';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: new ConsoleLogger({ colors: true }),
+    cors: true,
+    abortOnError: false,
   });
 
   const config = new DocumentBuilder()
@@ -29,25 +35,30 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new ExceptionsFilter(httpAdapter));
+  const loggerService = app.get(LoggerService);
+
+  app.useGlobalFilters(new AllExceptionsFilter(loggerService));
 
   app.useGlobalPipes(
     new ValidationPipe({
-      stopAtFirstError: true,
-      exceptionFactory(errors) {
-        const firstError = errors[0];
-        const firstConstraint = Object.values(firstError.constraints!)[0];
+      transform: true,
+      whitelist: true,
+      validateCustomDecorators: true,
+      forbidNonWhitelisted: true,
+      exceptionFactory: (errors) => {
+        const messages = errors.map((error) => error.constraints);
         return new BadRequestException({
-          message: firstConstraint,
           statusCode: HttpStatus.BAD_REQUEST,
+          message: messages.join(', '),
         });
       },
     }),
   );
 
+  app.useGlobalInterceptors(new GlobalInterceptor(loggerService));
+
   app.setGlobalPrefix('api/v1');
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
