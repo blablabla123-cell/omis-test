@@ -3,18 +3,23 @@ import { APIResponse, APIResponseStatus } from '../common/index.js';
 import { DatabaseService } from '../database/database.service.js';
 import { Metric } from '../generated/prisma/client.js';
 import { MetricDto } from './dtos/index.js';
+import { MetricNotFoundException } from '../exceptions/index.js';
 
 @Injectable()
 export class MetricsService {
   constructor(private readonly databaseService: DatabaseService) {}
 
+  async getMetricById(metric: Metric): Promise<APIResponse<Metric>> {
+    return {
+      status: APIResponseStatus.SUCCESS,
+      message: 'Metric fetched successfully',
+      data: metric,
+    };
+  }
+
   async createMetric(dto: MetricDto): Promise<APIResponse<Metric>> {
     const metric = await this.databaseService.metric.create({
-      data: {
-        name: dto.name,
-        targetValue: dto.targetValue,
-        weight: dto.weight,
-      },
+      data: dto,
     });
 
     return {
@@ -42,7 +47,7 @@ export class MetricsService {
     });
 
     if (!metric) {
-      throw new NotFoundException('Metric not found');
+      throw new MetricNotFoundException();
     }
 
     return {
@@ -52,16 +57,12 @@ export class MetricsService {
     };
   }
 
-  async updateMetric(dto: MetricDto): Promise<APIResponse<Metric>> {
+  async updateMetric(id: number, dto: MetricDto): Promise<APIResponse<Metric>> {
     const metric = await this.databaseService.metric.update({
       where: {
-        id: dto.id,
+        id: id,
       },
-      data: {
-        name: dto.name,
-        targetValue: dto.targetValue,
-        weight: dto.weight,
-      },
+      data: dto,
     });
 
     return {

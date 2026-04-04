@@ -4,29 +4,38 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common';
-import { APIResponse, Roles, RolesGuard } from '../common/index.js';
+import {
+  APIResponse,
+  Authentication,
+  Roles,
+  RolesGuard,
+} from '../common/index.js';
 import { User, UserRole } from '../generated/prisma/client.js';
 import { UsersService } from './users.service.js';
-import { JWTAuthenticationGuard } from '../authentication/guards/jwt-authentication.guard.js';
+import { JWTAuthenticationGuard } from '../common/guards/jwt-authentication.guard.js';
 import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
-@ApiResponse({ status: 401, description: 'Unauthorized' })
-@ApiResponse({ status: 403, description: 'Forbidden' })
-@Roles(UserRole.ADMIN)
-@UseGuards(RolesGuard, JWTAuthenticationGuard)
+@Authentication(UserRole.ADMIN)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Delete(':id')
   async deleteUserById(
-    @Param('id') userId: string,
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
+      }),
+    )
+    id: string,
   ): Promise<APIResponse<User>> {
-    return this.usersService.deleteUserById(userId);
+    return this.usersService.deleteUserById(id);
   }
 }

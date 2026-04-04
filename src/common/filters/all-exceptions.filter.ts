@@ -3,24 +3,26 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  LoggerService,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Response, Request } from 'express';
-
-import { LoggerService } from '../logger/logger.service.js';
-import { APIResponseStatus, ErrorAPIResponse } from '../common/index.js';
-import { Prisma } from '../generated/prisma/client.js';
+import { APIResponseStatus } from '../enums/api-response-status.enum.js';
+import { ErrorAPIResponse } from '../types/error-api-response.type.js';
+import { Prisma } from '../../generated/prisma/client.js';
 
 @Catch()
-export class ExceptionsFilter extends BaseExceptionFilter {
-  private readonly logger = new LoggerService();
+export class AllExceptionsFilter extends BaseExceptionFilter {
+  constructor(private readonly logger: LoggerService) {
+    super();
+  }
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const responseObject: ErrorAPIResponse = {
+    const data: ErrorAPIResponse = {
       timestamp: new Date().toISOString(),
       path: request.url,
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -28,25 +30,25 @@ export class ExceptionsFilter extends BaseExceptionFilter {
     };
 
     if (exception instanceof HttpException) {
-      responseObject.statusCode = exception.getStatus();
-      responseObject.error = exception.getResponse();
+      data.statusCode = exception.getStatus();
+      data.error = exception.getResponse();
     } else if (exception instanceof Prisma.PrismaClientValidationError) {
-      responseObject.statusCode = 422;
-      responseObject.error = exception.message.replace(/\n/g, '');
+      data.statusCode = HttpStatus.UNPROCESSABLE_ENTITY;
+      data.error = exception.message;
     } else if (exception instanceof Error) {
-      responseObject.error = exception.message;
+      data.error = exception.message;
     }
 
     const apiResponse = {
       status: APIResponseStatus.FAILURE,
-      data: responseObject,
+      data,
     };
 
     this.logger.error(
       JSON.stringify(apiResponse.data.error),
-      ExceptionsFilter.name,
+      AllExceptionsFilter.name,
     );
 
-    response.status(responseObject.statusCode).json(apiResponse);
+    response.status(data.statusCode).json(apiResponse);
   }
 }

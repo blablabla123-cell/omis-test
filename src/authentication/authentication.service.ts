@@ -10,8 +10,7 @@ import {
 } from '../exceptions/index.js';
 import { APIResponse, APIResponseStatus } from '../common/index.js';
 import { AuthenticationResponse } from './types/authentication-response.type.js';
-import { JWTPayload } from './types/jwt-payload.type.js';
-import { LoggerService } from '../logger/logger.service.js';
+import { JWTPayload } from '../common/types/jwt-payload.type.js';
 
 @Injectable()
 export class AuthenticationService {
@@ -19,8 +18,7 @@ export class AuthenticationService {
     private readonly usersService: UsersService,
     private readonly authenticationUtils: AuthenticationUtils,
     private readonly jwtService: JwtService,
-    private readonly loggerService: LoggerService,
-  ) { }
+  ) {}
 
   async signIn(
     payload: JWTPayload,
@@ -37,7 +35,6 @@ export class AuthenticationService {
   async signUp(
     dto: AuthenticationDto,
   ): Promise<APIResponse<AuthenticationResponse>> {
-    this.loggerService.debug(`signUp: ${JSON.stringify(dto)}`);
     let user = await this.usersService.getUserByEmail(dto.email);
 
     if (user) {
