@@ -16,7 +16,6 @@ import { MetricsController } from './metrics/metrics.controller.js';
 import { PerfomanceController } from './perfomance/perfomance.controller.js';
 import { UsersController } from './users/users.controller.js';
 import { AuthenticationController } from './authentication/authentication.controller.js';
-
 @Module({
   imports: [
     DatabaseModule,
@@ -26,6 +25,7 @@ import { AuthenticationController } from './authentication/authentication.contro
     ConfigModule.forRoot({ isGlobal: true }),
     MetricsModule,
     LoggerModule,
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
 })
 export class AppModule implements NestModule {

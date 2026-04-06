@@ -31,13 +31,13 @@ import { Review } from './types/review.type.js';
 import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('perfomance')
-@Authentication(UserRole.ADMIN)
+@Authentication([UserRole.ADMIN])
 export class PerfomanceController {
   constructor(private readonly perfomanceService: PerfomanceService) {}
 
   @ApiResponse({ status: 200, description: 'Review fetched successfully' })
   @HttpCode(HttpStatus.OK)
-  @Roles(UserRole.ADMIN, UserRole.USER)
+  @Roles([UserRole.ADMIN, UserRole.USER])
   @Get('my-perfomance')
   async getMyPerfomance(
     @GetUser('ID') userId: string,

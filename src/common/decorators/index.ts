@@ -1,3 +1,3 @@
-export * from './roles.js';
-export * from './get-user.js';
+export * from './roles.decorator.js';
+export * from './get-user.decorator.js';
 export * from './authentication.decorator.js';

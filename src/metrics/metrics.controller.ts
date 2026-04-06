@@ -34,7 +34,7 @@ import {
 } from '@nestjs/swagger';
 
 @Controller('metrics')
-@Authentication(UserRole.ADMIN)
+@Authentication([UserRole.ADMIN])
 @ApiTags('Metrics')
 export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}
