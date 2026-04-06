@@ -10,16 +10,7 @@ export class DatabaseService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly discoveryService: DiscoveryService,
-  ) {
-    const providers = discoveryService.getProviders();
-    console.log(
-      'Providers:',
-      providers.map((p) => p.name),
-    );
-
+  constructor(private readonly configService: ConfigService) {
     const databaseUrl = configService.get<string>('DATABASE_URL');
 
     const adapter = new PrismaPg({

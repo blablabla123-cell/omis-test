@@ -50,10 +50,14 @@ async function bootstrap() {
       validateCustomDecorators: true,
       forbidNonWhitelisted: true,
       exceptionFactory: (errors) => {
-        const messages = errors.map((error) => error.constraints);
+        const result = errors.map((error) => ({
+          property: error.property,
+          message: Object.values(error.constraints || {}).join(', '),
+        }));
         return new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: messages.join(', '),
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          message: 'Validation failed',
+          errors: result,
         });
       },
     }),
