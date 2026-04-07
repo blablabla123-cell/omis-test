@@ -19,7 +19,7 @@ import { JWTAuthenticationGuard } from '../common/guards/jwt-authentication.guar
 import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
-@Authentication(UserRole.ADMIN)
+@Authentication([UserRole.ADMIN])
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

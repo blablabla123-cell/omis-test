@@ -1,4 +1,4 @@
-import { AuthenticationGuard } from './authentication.guard';
+import { AuthenticationGuard } from './authentication.guard.js';
 
 describe('AuthenticationGuard', () => {
   it('should be defined', () => {

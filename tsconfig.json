@@ -1,17 +1,22 @@
 {
   "compilerOptions": {
-    "types": ["jest"],
+    "types": ["node", "jest"],
+    "isolatedModules": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "target": "es2022",
     "declaration": true,
+    "resolveJsonModule": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
     "sourceMap": true,
+    "rootDir": "./src",
     "outDir": "./dist",
-    // "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -19,5 +24,6 @@
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "include": ["src/**/*"]
 }

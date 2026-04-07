@@ -12,6 +12,7 @@ import 'dotenv/config';
 import { LoggerService } from './logger/logger.service.js';
 import { AllExceptionsFilter } from './common/index.js';
 import { GlobalInterceptor } from './common/interceptors/global.interceptor.js';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -36,6 +37,9 @@ async function bootstrap() {
   });
 
   const loggerService = app.get(LoggerService);
+  const configService = app.get(ConfigService);
+
+  const port = configService.get<number>('PORT', 3000);
 
   app.useGlobalFilters(new AllExceptionsFilter(loggerService));
 
@@ -46,10 +50,14 @@ async function bootstrap() {
       validateCustomDecorators: true,
       forbidNonWhitelisted: true,
       exceptionFactory: (errors) => {
-        const messages = errors.map((error) => error.constraints);
+        const result = errors.map((error) => ({
+          property: error.property,
+          message: Object.values(error.constraints || {}).join(', '),
+        }));
         return new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: messages.join(', '),
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          message: 'Validation failed',
+          errors: result,
         });
       },
     }),
@@ -59,6 +67,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/v1');
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(port);
 }
 bootstrap();

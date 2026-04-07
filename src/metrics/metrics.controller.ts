@@ -22,7 +22,7 @@ import {
   RolesGuard,
 } from '../common/index.js';
 import { MetricsService } from './metrics.service.js';
-import { Metric, UserRole } from '../generated/prisma/client.js';
+import { type Metric, UserRole } from '../generated/prisma/client.js';
 import { MetricDto } from './dtos/index.js';
 import { JWTAuthenticationGuard } from '../common/guards/index.js';
 import {
@@ -34,7 +34,7 @@ import {
 } from '@nestjs/swagger';
 
 @Controller('metrics')
-@Authentication(UserRole.ADMIN)
+@Authentication([UserRole.ADMIN])
 @ApiTags('Metrics')
 export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}

@@ -3,13 +3,13 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  LoggerService,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Response, Request } from 'express';
 import { APIResponseStatus } from '../enums/api-response-status.enum.js';
 import { ErrorAPIResponse } from '../types/error-api-response.type.js';
 import { Prisma } from '../../generated/prisma/client.js';
+import { LoggerService } from '../../logger/logger.service.js';
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
@@ -45,7 +45,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     };
 
     this.logger.error(
-      JSON.stringify(apiResponse.data.error),
+      `Exception caught: ${JSON.stringify(data.error)}`,
       AllExceptionsFilter.name,
     );
 

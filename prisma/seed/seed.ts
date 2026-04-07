@@ -1,5 +1,4 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-
 import { env } from 'prisma/config';
 import 'dotenv/config';
 import { AuthenticationUtils } from '../../src/authentication/authentication.utils.js';
@@ -9,12 +8,13 @@ const connectionString = env('DATABASE_URL');
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
+export const testAdminUser = {
+  email: 'test@example.com',
+  password: 'password',
+  role: UserRole.ADMIN,
+};
+
 async function main() {
-  const testAdminUser = {
-    email: 'test@example.com',
-    password: 'password',
-    role: UserRole.ADMIN,
-  };
 
   const user = await prisma.user.findUnique({
     where: {
