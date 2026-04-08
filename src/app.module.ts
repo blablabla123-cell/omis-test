@@ -25,6 +25,7 @@ import Joi from 'joi';
     PerfomanceModule,
     UsersModule,
     ConfigModule.forRoot({
+      expandVariables: true,
       isGlobal: true,
       load: [configuration],
       envFilePath: '.env',
