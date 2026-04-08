@@ -1,7 +1,6 @@
 import Joi from 'joi';
 
 export default () => {
-  console.log(`${process.env.DATABASE_URL}`);
   const port = process.env.PORT || '3000';
   const postgresPort = process.env.POSTGRES_PORT || '5432';
 
