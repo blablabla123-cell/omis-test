@@ -7,9 +7,10 @@ import { AuthenticationService } from './authentication.service.js';
 import { AuthenticationUtils } from './authentication.utils.js';
 import { LocalStrategy } from './strategies/local.strategy.js';
 import { DatabaseModule } from '../database/database.module.js';
-import { UsersModule } from '../users/users.module.js';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersModule } from '../users/users.module.js';
+import { EnvVariables } from '../common/interfaces/index.js';
 
 describe('AuthenticationController', () => {
   let controller: AuthenticationController;
@@ -20,9 +21,9 @@ describe('AuthenticationController', () => {
         DatabaseModule,
         UsersModule,
         JwtModule.registerAsync({
-          inject: [ConfigService],
-          useFactory: function (configService: ConfigService) {
-            const jwtSecret = configService.get<string>('JWT_ACCESS_SECRET');
+          inject: [ConfigService<EnvVariables>],
+          useFactory: function (configService: ConfigService<EnvVariables>) {
+            const jwtSecret = configService.get('jwt', { infer: true });
             return {
               global: true,
               secret: jwtSecret,

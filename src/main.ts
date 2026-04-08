@@ -8,11 +8,11 @@ import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module.js';
-import 'dotenv/config';
 import { LoggerService } from './logger/logger.service.js';
 import { AllExceptionsFilter } from './common/index.js';
 import { GlobalInterceptor } from './common/interceptors/global.interceptor.js';
 import { ConfigService } from '@nestjs/config';
+import { EnvVariables } from './common/interfaces/index.js';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -37,9 +37,9 @@ async function bootstrap() {
   });
 
   const loggerService = app.get(LoggerService);
-  const configService = app.get(ConfigService);
+  const configService = app.get(ConfigService<EnvVariables>);
 
-  const port = configService.get<number>('PORT', 3000);
+  const port = configService.get('port', 3000, { infer: true });
 
   app.useGlobalFilters(new AllExceptionsFilter(loggerService));
 
