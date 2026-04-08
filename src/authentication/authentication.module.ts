@@ -4,10 +4,10 @@ import { AuthenticationService } from './authentication.service.js';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './strategies/local.strategy.js';
 import { AuthenticationUtils } from './authentication.utils.js';
-import 'dotenv/config';
 import { DatabaseModule } from '../database/database.module.js';
 import { UsersModule } from '../users/users.module.js';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
+import { EnvVariables } from '../common/interfaces/env-variables.interface.js';
 
 @Module({
   imports: [
@@ -15,8 +15,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UsersModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: function (configService: ConfigService) {
-        const jwtSecret = configService.get<string>('JWT_ACCESS_SECRET');
+      useFactory: function (configService: ConfigService<EnvVariables>) {
+        const jwtSecret = configService.get('jwt', { infer: true });
         return {
           global: true,
           secret: jwtSecret,

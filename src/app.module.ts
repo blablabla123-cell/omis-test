@@ -16,16 +16,28 @@ import { MetricsController } from './metrics/metrics.controller.js';
 import { PerfomanceController } from './perfomance/perfomance.controller.js';
 import { UsersController } from './users/users.controller.js';
 import { AuthenticationController } from './authentication/authentication.controller.js';
+import configuration, { validationSchema } from './config/configuration.js';
+import Joi from 'joi';
 @Module({
   imports: [
     DatabaseModule,
     AuthenticationModule,
     PerfomanceModule,
     UsersModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+      envFilePath: '.env',
+      skipProcessEnv: true,
+      cache: true,
+      validationSchema: validationSchema,
+      validationOptions: {
+        allowUnknown: true,
+        abortEarly: false,
+      },
+    }),
     MetricsModule,
     LoggerModule,
-    ConfigModule.forRoot({ isGlobal: true }),
   ],
 })
 export class AppModule implements NestModule {
